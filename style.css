@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .game-container {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
@@ -55,62 +54,4 @@
     padding: 10px;
     border: 2px solid #007bff;
     display: inline-block;
-=======
-.game-container {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 20px;
-    border: 2px sollid #ccc;
-    max-width: 500px;
-    margin: 40px auto;
-}
-
-.input-btn{
-    padding: 10px 20px;
-    margin: 10px;
-    cursor: pointer;
-    border: none;
-    font-size: 18px;
-    transition: background-color 0.2s;
-}
-
-.input-btn.on {
-    background-color: chartreuse;
-    color: white;
-}
-
-.input-btn.off {
-    background-color: red;
-    color: white;
-}
-
-#led-light {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-top: 80px ;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 3px solid #333;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.Light.on {
-    background-color: #ffeb3b;
-    box-shadow: 0 0 20px #ffeb3b, 0 0 30px #ffeb3b;
-}
-
-.Light.off {
-    background: #666;
-}
-
-#gate-symbol {
-    font-weight: bold;
-    font-size: 24px;
-    margin: 20px;
-    padding: 10px;
-    border: 2px solid #007bff;
-    display: inline-block;
->>>>>>> 3d6a81c48ccd300c35afa04f469d955db754203d
 }
