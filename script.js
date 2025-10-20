@@ -1,11 +1,14 @@
 class GateSimulator {
     // 1. Dữ liệu và Cấu hình Cổng Logic
     static LOGIC_GATES = {
+        'Buffer': (a, b) => a,
         'AND': (a, b) => a && b,
         'OR': (a, b) => a || b,
         'NOT': (a, b) => !a, // Lưu ý: Hàm NOT chỉ cần đối số 'a'
+        'NAND': (a, b) => 1 - (a && b),
         'NOR': (a, b) => 1 - (a || b),
-        'XOR': (a, b) => !a || !b
+        'XOR': (a, b) => a != b,
+        'XNOR': (a, b) => !(a != b)
     };
     static GATE_NAMES = Object.keys(GateSimulator.LOGIC_GATES);
 
@@ -17,6 +20,7 @@ class GateSimulator {
         this.gateDisplay = document.getElementById('gate-display');
         this.gateSymbol = document.getElementById('gate-symbol');
         this.nextGateBtn = document.getElementById('next-gate-btn');
+        this.scoreDisplay = document.getElementById('score-display');
 
         // 3. Trạng thái (State) của Simulator
         this.currentGateIndex = 0;
@@ -48,11 +52,18 @@ class GateSimulator {
         const output = gateFunction(valA, valB);
 
         // Cập nhật LED
-        this.ledLight.classList.toggle('on', output == 1);
-        this.ledLight.classList.toggle('off', output == 0);
+        if (output) {
+            this.ledLight.classList.remove('off');
+            this.ledLight.classList.add('on');
+            this.nextGateBtn.style.display = 'block';
+        } else {
+            this.ledLight.classList.remove('on');
+            this.ledLight.classList.add('off');
+            this.nextGateBtn.style.display = 'none';
+        }
 
         // Ẩn/hiện Input B cho cổng NOT
-        if (currentGateName === 'NOT') {
+        if (currentGateName === 'NOT' || currentGateName === 'Buffer') {
             this.inputB.style.display = 'none';
         } else {
             this.inputB.style.display = 'inline-block';
