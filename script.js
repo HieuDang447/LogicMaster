@@ -46,8 +46,8 @@ class GateSimulator {
         const output = gateFunction(valA, valB);
 
         // Cập nhật LED
-        this.ledLight.classList.toggle('on', !!output);
-        this.ledLight.classList.toggle('off', !output);
+        this.ledLight.classList.toggle('on', output == 1);
+        this.ledLight.classList.toggle('off', output == 0);
 
         // Ẩn/hiện Input B cho cổng NOT
         if (currentGateName === 'NOT') {
