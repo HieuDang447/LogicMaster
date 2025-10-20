@@ -3,7 +3,8 @@ class GateSimulator {
     static LOGIC_GATES = {
         'AND': (a, b) => a && b,
         'OR': (a, b) => a || b,
-        'NOT': (a, b) => !a // Lưu ý: Hàm NOT chỉ cần đối số 'a'
+        'NOT': (a, b) => !a, // Lưu ý: Hàm NOT chỉ cần đối số 'a'
+        'NOR': (a, b) => 1 - (a || b)
     };
     static GATE_NAMES = Object.keys(GateSimulator.LOGIC_GATES);
 
