@@ -1,4 +1,4 @@
-class GateSimulator {
+class LogicGates {
     // 1. Dữ liệu và Cấu hình Cổng Logic
     static LOGIC_GATES = {
         'Buffer': (a, b) => a,
@@ -10,43 +10,83 @@ class GateSimulator {
         'XOR': (a, b) => a != b,
         'XNOR': (a, b) => !(a != b)
     };
-    static GATE_NAMES = Object.keys(GateSimulator.LOGIC_GATES);
+    static GATE_NAMES = Object.keys(LogicGates.LOGIC_GATES);
+}
+
+class InputButton {
+    constructor(elementId, label) {
+        this.element = document.getElementById(elementId);
+        this.label = label;
+        this.reset();
+    }
+
+    getValue() {
+        return parseInt(this.element.dataset.value);
+    }
+
+    reset() {
+        this.element.dataset.value = 0;
+        this.element.textContent = `${this.label}: 0`;
+        this.updateUI(0);
+    }
+
+    toggle() {
+        const currentValue = this.getValue();
+        const newValue = 1 - currentValue;
+
+        this.element.dataset.value = newValue;
+        this.element.textContent = `${this.label}: ${newValue}`;
+
+        this.updateUI(newValue);
+    }
+
+    updateUI(value) {
+        this.element.classList.toggle('on', value === 1);
+        this.element.classList.toggle('off', value === 0);
+    }
+
+    addEventListener(eventType, handler) {
+        this.element.addEventListener(eventType, handler);
+    }
+}
+
+class GateSimulator {
+    inputA;
+    inputB;
+    ledLight;
+    gateDisplay;
+    gateSymbol;
+    nextGateBtn;
+    scoreDisplay;
+    currentGateIndex = 0;
+    score = 0;
 
     constructor() {
-        // 2. Tham chiếu các phần tử DOM (Thuộc tính đối tượng)
-        this.inputA = document.getElementById('input-a');
-        this.inputB = document.getElementById('input-b');
+        this.inputA = new InputButton('input-a', 'A')
+        this.inputB = new InputButton('input-b', 'B')
         this.ledLight = document.getElementById('led-light');
         this.gateDisplay = document.getElementById('gate-display');
         this.gateSymbol = document.getElementById('gate-symbol');
         this.nextGateBtn = document.getElementById('next-gate-btn');
         this.scoreDisplay = document.getElementById('score-display');
 
-        // 3. Trạng thái (State) của Simulator
-        this.currentGateIndex = 0;
-
-        // 4. Thiết lập Event Listeners
-        this.inputA.addEventListener('click', this.toggleInput.bind(this));
-        this.inputB.addEventListener('click', this.toggleInput.bind(this));
+        this.inputA.addEventListener('click', () => {
+            this.inputA.toggle();
+            this.checkLogic();
+        });
+        this.inputB.addEventListener('click', () => {
+            this.inputB.toggle();
+            this.checkLogic();
+        });
         this.nextGateBtn.addEventListener('click', this.setupNextGate.bind(this));
     }
 
-    // 5. Phương thức Đặt lại Input (Tái sử dụng)
-    resetInputs() {
-        this.inputA.dataset.value = 0;
-        this.inputB.dataset.value = 0;
-        this.inputA.textContent = 'A: 0';
-        this.inputB.textContent = 'B: 0';
-        this.inputA.classList.remove('on'); this.inputA.classList.add('off');
-        this.inputB.classList.remove('on'); this.inputB.classList.add('off');
-    }
-
-    // 6. Phương thức Chính: Kiểm tra Logic và Cập nhật Output
     checkLogic() {
-        const valA = parseInt(this.inputA.dataset.value);
-        const valB = parseInt(this.inputB.dataset.value);
-        const currentGateName = GateSimulator.GATE_NAMES[this.currentGateIndex];
-        const gateFunction = GateSimulator.LOGIC_GATES[currentGateName];
+        const valA = this.inputA.getValue();
+        const valB = this.inputB.getValue();
+
+        const currentGateName = LogicGates.GATE_NAMES[this.currentGateIndex];
+        const gateFunction = LogicGates.LOGIC_GATES[currentGateName];
 
         // Tính toán đầu ra
         const output = gateFunction(valA, valB);
@@ -56,6 +96,10 @@ class GateSimulator {
             this.ledLight.classList.remove('off');
             this.ledLight.classList.add('on');
             this.nextGateBtn.style.display = 'block';
+            if (this.nextGateBtn.style.display === 'block') {
+                this.score += 10;
+                this.scoreDisplay.textContent = `Điểm: ${this.score}`;
+            }
         } else {
             this.ledLight.classList.remove('on');
             this.ledLight.classList.add('off');
@@ -64,33 +108,18 @@ class GateSimulator {
 
         // Ẩn/hiện Input B cho cổng NOT
         if (currentGateName === 'NOT' || currentGateName === 'Buffer') {
-            this.inputB.style.display = 'none';
+            this.inputB.element.style.display = 'none';
         } else {
-            this.inputB.style.display = 'inline-block';
+            this.inputB.element.style.display = 'inline-block';
         }
-    }
-
-    // 7. Phương thức Chuyển đổi trạng thái Input A/B
-    toggleInput(event) {
-        const btn = event.currentTarget; // Dùng currentTarget để đảm bảo lấy đúng nút
-        let currentValue = parseInt(btn.dataset.value);
-
-        const newValue = 1 - currentValue;
-        const label = btn.id === 'input-a' ? 'A' : 'B';
-
-        btn.dataset.value = newValue;
-        btn.textContent = `${label}: ${newValue}`;
-
-        btn.classList.toggle('on', newValue === 1);
-        btn.classList.toggle('off', newValue === 0);
-
-        this.checkLogic();
     }
 
     // 8. Phương thức Thiết lập Cổng Mới (Khởi tạo ban đầu)
     setupNewGate() {
-        this.resetInputs();
-        const currentGateName = GateSimulator.GATE_NAMES[this.currentGateIndex];
+        this.inputA.reset();
+        this.inputB.reset();
+
+        const currentGateName = LogicGates.GATE_NAMES[this.currentGateIndex];
         this.gateDisplay.textContent = `Cổng Logic: ${currentGateName}`;
         this.gateSymbol.textContent = currentGateName;
         
@@ -100,7 +129,7 @@ class GateSimulator {
     // 9. Phương thức Chuyển sang Cổng Kế tiếp
     setupNextGate() {
         // Tăng Index và quay lại 0 khi hết mảng (vòng lặp)
-        this.currentGateIndex = (this.currentGateIndex + 1) % GateSimulator.GATE_NAMES.length;
+        this.currentGateIndex = (this.currentGateIndex + 1) % LogicGates.GATE_NAMES.length;
         
         this.setupNewGate(); // Dùng lại hàm setupNewGate để cập nhật UI và Logic
     }
