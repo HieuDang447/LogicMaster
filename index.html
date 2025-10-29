@@ -5,18 +5,20 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    
+<body>  
+
     <div class="game-container">
         <h1>Logic Master</h1>
         <div id="score-display" class="text">Điểm: 0</div>
         <h2 id="gate-display">Cổng Logic: </h2>
+
         <div class="inputs">
             <button id="input-a" class="input-btn off" data-value="0">A: 0</button> 
             <button id="input-b" class="input-btn off" data-value="0">B: 0</button>
         </div>
+
         <div class="circuit-area">
-            <div id="gate-symbol" class="and-symbol">AND</div>
+            <img id="gate-symbol" src="" alt="Logic Gate" class="gate-image-style">
         </div>
 
         <div class="output">
@@ -24,7 +26,10 @@
             <p>Đầu ra</p>
         </div>
 
-        <button id="next-gate-btn" style="display:block">Màn tiếp theo</button>
+        <div class="check-button" style="display: flex; gap: 190px;">
+            <button id="check-output-btn" class="output-button">Kiểm tra</button>
+            <button id="next-gate-btn" class="output-button">Màn tiếp theo</button>
+        </div>
     </div>    
     <script src="script.js"></script>
 </body>

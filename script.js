@@ -2,13 +2,13 @@ class LogicGates {
     // 1. Dữ liệu và Cấu hình Cổng Logic
     static LOGIC_GATES = {
         'Buffer': (a, b) => a,
-        'AND': (a, b) => a && b,
-        'OR': (a, b) => a || b,
-        'NOT': (a, b) => !a, // Lưu ý: Hàm NOT chỉ cần đối số 'a'
+        'AND': (a, b) => (a && b) ? 1: 0,
+        'OR': (a, b) => (a || b) ? 1 : 0,
+        'NOT': (a, b) => !a ? 1 : 0, // Lưu ý: Hàm NOT chỉ cần đối số 'a'
         'NAND': (a, b) => 1 - (a && b),
         'NOR': (a, b) => 1 - (a || b),
-        'XOR': (a, b) => a != b,
-        'XNOR': (a, b) => !(a != b)
+        'XOR': (a, b) => (a != b) ? 1 : 0,
+        'XNOR': (a, b) => !(a != b) ? 1 : 0
     };
     static GATE_NAMES = Object.keys(LogicGates.LOGIC_GATES);
 }
@@ -58,6 +58,7 @@ class GateSimulator {
     gateSymbol;
     nextGateBtn;
     scoreDisplay;
+    checkOuputButton;
     currentGateIndex = 0;
     score = 0;
 
@@ -69,16 +70,20 @@ class GateSimulator {
         this.gateSymbol = document.getElementById('gate-symbol');
         this.nextGateBtn = document.getElementById('next-gate-btn');
         this.scoreDisplay = document.getElementById('score-display');
+        this.checkOuputButton = document.getElementById('check-output-btn')
 
         this.inputA.addEventListener('click', () => {
             this.inputA.toggle();
-            this.checkLogic();
+
         });
         this.inputB.addEventListener('click', () => {
             this.inputB.toggle();
-            this.checkLogic();
+
         });
         this.nextGateBtn.addEventListener('click', this.setupNextGate.bind(this));
+        this.checkOuputButton.addEventListener('click', () => {
+            this.checkLogic();
+        });
     }
 
     checkLogic() {
@@ -96,21 +101,11 @@ class GateSimulator {
             this.ledLight.classList.remove('off');
             this.ledLight.classList.add('on');
             this.nextGateBtn.style.display = 'block';
-            if (this.nextGateBtn.style.display === 'block') {
-                this.score += 10;
-                this.scoreDisplay.textContent = `Điểm: ${this.score}`;
-            }
+            this.checkOuputButton.disabled = true;
         } else {
             this.ledLight.classList.remove('on');
             this.ledLight.classList.add('off');
             this.nextGateBtn.style.display = 'none';
-        }
-
-        // Ẩn/hiện Input B cho cổng NOT
-        if (currentGateName === 'NOT' || currentGateName === 'Buffer') {
-            this.inputB.element.style.display = 'none';
-        } else {
-            this.inputB.element.style.display = 'inline-block';
         }
     }
 
@@ -121,16 +116,34 @@ class GateSimulator {
 
         const currentGateName = LogicGates.GATE_NAMES[this.currentGateIndex];
         this.gateDisplay.textContent = `Cổng Logic: ${currentGateName}`;
-        this.gateSymbol.textContent = currentGateName;
+
+        const gateImageName = currentGateName.toLowerCase();
+        this.gateSymbol.src = `images/${gateImageName}.svg`;
+        this.gateSymbol.alt = `${currentGateName} Gate Symbol`;
         
-        this.checkLogic();
+        if (currentGateName === 'NOT' || currentGateName === 'Buffer') {
+            this.gateSymbol.textContent = '';
+        } else {
+            this.gateSymbol.textContent = currentGateName;
+        }
+        this.ledLight.classList.remove('on');
+        this.ledLight.classList.add('off');
+        // Ẩn/hiện Input B cho cổng NOT
+        if (currentGateName === 'NOT' || currentGateName === 'Buffer') {
+            this.inputB.element.style.display = 'none';
+        } else {
+            this.inputB.element.style.display = 'inline-block';
+        }
+        this.nextGateBtn.style.display = 'none';
     }
 
     // 9. Phương thức Chuyển sang Cổng Kế tiếp
     setupNextGate() {
+        this.score += 10;
+        this.scoreDisplay.textContent = `Điểm: ${this.score}`;
         // Tăng Index và quay lại 0 khi hết mảng (vòng lặp)
         this.currentGateIndex = (this.currentGateIndex + 1) % LogicGates.GATE_NAMES.length;
-        
+        this.checkOuputButton.disabled = false;
         this.setupNewGate(); // Dùng lại hàm setupNewGate để cập nhật UI và Logic
     }
 
