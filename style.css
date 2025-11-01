@@ -60,8 +60,9 @@
     font-size: 18px;
 }
 
-#score-display {
+.info-display {
     font-size: 25px;
-
+    margin: auto;
+    margin-left: 100px;
 }
 
