@@ -8,7 +8,16 @@ export class LogicGates {
         'NAND': (a, b) => !(a && b) ? 1: 0,
         'NOR': (a, b) => !(a || b) ? 1 : 0,
         'XOR': (a, b) => (a != b) ? 1 : 0,
-        'XNOR': (a, b) => !(a != b) ? 1 : 0
-    };
+        'XNOR': (a, b) => !(a != b) ? 1 : 0,
+    }
+
+    static GATES_STAGE2 = {
+        'A AND (NOT B)': (a, b) => (a && !b) ? 1 : 0,
+        '(NOT A) AND B': (a, b) => ((!a) && b) ? 1 : 0,
+        'A OR (NOT B)': (a, b) => (a || !b) ? 1 : 0,
+        '(NOT A) OR B': (a, b) => (!a || b) ? 1 : 0
+    }
+
+    static GATES_NAMES_2 = Object.keys(LogicGates.GATES_STAGE2);
     static GATE_NAMES = Object.keys(LogicGates.LOGIC_GATES);
 }

@@ -22,6 +22,7 @@
 
         <div class="circuit-area">
             <img id="gate-symbol" src="" alt="Logic Gate" class="gate-image-style">
+            <img id="gate-symbol-2" src="" alt="Logic Gate" style="display: none;" class="gate-image-style-2">
         </div>
 
         <div class="output">
@@ -29,9 +30,13 @@
             <p>Đầu ra</p>
         </div>
 
-        <div class="check-button" style="display: flex; gap: 190px;">
+        <div style="display: flex; gap: 190px;">
             <button id="check-output-btn" class="output-button">Kiểm tra</button>
             <button id="next-gate-btn" class="output-button">Màn tiếp theo</button>
+            <button id="tryagain-btn" class="output-button" style="display:none">Thử lại</button>
+        </div>
+        <div>
+            <button id="next-stage-btn" style="display:none">GIAI ĐOẠN 2</button>
         </div>
     </div>    
     <script type="module" src="main.js"></script>
