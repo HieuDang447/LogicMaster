@@ -6,17 +6,26 @@ export class GatePuzzle {
     ledLight;
     gateDisplay;
     gateSymbol;
+    gateSymbol2
+
     nextGateBtn;
     scoreDisplay;
     checkOuputButton;
+
     moves;
     moveRemaining;
+
     tryAgainBtn;
     nextStageBtn;
+
     currentGateIndex = 0;
     score = 0;
     currentStage;
-    
+
+    soundClick;
+    soundSuccess;
+    soundFail;
+    soundStage;
 
     constructor() {
         this.inputA = new InputButton('input-a', 'A')
@@ -31,15 +40,19 @@ export class GatePuzzle {
         this.moveRemaining = document.getElementById('moves-remaining');
         this.tryAgainBtn = document.getElementById('tryagain-btn');
         this.nextStageBtn = document.getElementById('next-stage-btn');
+        this.soundClick = new Audio('/audio/click.mp3');
+        this.soundSuccess = new Audio('/audio/success.mp3');
+        this.soundFail = new Audio('/audio/fail.mp3');
+        this.soundStage = new Audio('/audio/stage.mp3');
 
         this.inputA.addEventListener('click', () => {
             this.inputA.toggle();
-
+            this.playSound(this.soundClick);
         });
 
         this.inputB.addEventListener('click', () => {
             this.inputB.toggle();
-
+            this.playSound(this.soundClick);
         });
 
         this.nextGateBtn.addEventListener('click', () => {
@@ -86,8 +99,10 @@ export class GatePuzzle {
             this.ledLight.classList.add('on');
             this.nextGateBtn.style.display = 'block';
             this.checkOuputButton.disabled = true;
+            this.playSound(this.soundSuccess);
         } else {
             this.moves -= 1;
+            this.playSound(this.soundFail);
             this.ledLight.classList.remove('on');
             this.ledLight.classList.add('off');
             this.nextGateBtn.style.display = 'none';
@@ -153,6 +168,7 @@ export class GatePuzzle {
             this.gateDisplay.textContent = `Congratulation! Ban da hoan thanh phan huong dan.`;
             this.gateDisplay.style.color = 'green';
             this.nextStageBtn.style.display = 'block';
+            this.playSound(this.soundStage);
         }
         else {
             this.tryAgainBtn.style.display = 'block';
@@ -191,9 +207,7 @@ export class GatePuzzle {
     setUpNewStage() {
         this.inputA.reset();
         this.inputB.reset();
-    
-        this.gateSymbol.style.display = 'none';
-        this.gateSymbol2.style.display = 'block';
+
         this.nextGateBtn.style.display = 'none';
 
         const currentGateName = LogicGates.GATES_NAMES_2[this.currentGateIndex];
@@ -214,7 +228,8 @@ export class GatePuzzle {
         this.currentStage = 2;
         this.inputA.element.style.display = 'inline-block';
         this.inputB.element.style.display = 'inline-block';
-        this.gateSymbol.style.display = '';
+        this.gateSymbol.style.display = 'none';
+        this.gateSymbol2.style.display = 'block';
         this.gateDisplay.style.color = 'black';
         this.checkOuputButton.style.display = 'block';
         this.nextGateBtn.style.display = 'none';
@@ -249,6 +264,11 @@ export class GatePuzzle {
                 this.ledLight.parentElement.style.display = 'none';
             }
         }
+    }
+
+    playSound(soundObject) {
+        soundObject.currentTime = 0;
+        soundObject.play();
     }
 
     // 10. Phương thức Khởi chạy Simulator

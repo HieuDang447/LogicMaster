@@ -16,6 +16,18 @@
     transition: background-color 0.2s;
 }
 
+.input-btn:hover,
+.output-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.input-btn:active,
+.output-button:active {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
 .input-btn.on {
     background-color: chartreuse;
     color: white;
