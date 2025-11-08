@@ -26,6 +26,7 @@ export class GatePuzzle {
     soundSuccess;
     soundFail;
     soundStage;
+    soundNextLevel;
 
     constructor() {
         this.inputA = new InputButton('input-a', 'A')
@@ -40,10 +41,11 @@ export class GatePuzzle {
         this.moveRemaining = document.getElementById('moves-remaining');
         this.tryAgainBtn = document.getElementById('tryagain-btn');
         this.nextStageBtn = document.getElementById('next-stage-btn');
-        this.soundClick = new Audio('/audio/click.mp3');
-        this.soundSuccess = new Audio('/audio/success.mp3');
-        this.soundFail = new Audio('/audio/fail.mp3');
+        this.soundClick = new Audio('/audio/click.m4a');
+        this.soundSuccess = new Audio('/audio/success.m4a');
+        this.soundFail = new Audio('/audio/fail.m4a');
         this.soundStage = new Audio('/audio/stage.mp3');
+        this.soundNextLevel = new Audio('/audio/next-level.m4a');
 
         this.inputA.addEventListener('click', () => {
             this.inputA.toggle();
@@ -56,6 +58,7 @@ export class GatePuzzle {
         });
 
         this.nextGateBtn.addEventListener('click', () => {
+            this.playSound(this.soundNextLevel);
             if (this.currentStage == 1){
                 this.setupNextGate();
             }
@@ -103,6 +106,10 @@ export class GatePuzzle {
         } else {
             this.moves -= 1;
             this.playSound(this.soundFail);
+
+            this.moveRemaining.classList.add('red-moves');
+            setTimeout(() => { this.moveRemaining.classList.remove('red-moves'); }, 500);
+
             this.ledLight.classList.remove('on');
             this.ledLight.classList.add('off');
             this.nextGateBtn.style.display = 'none';
@@ -110,7 +117,7 @@ export class GatePuzzle {
         
         this.moveRemaining.textContent = `Số lượt thử: ${this.moves}`;
         if (this.moves <= 0) {
-            this.endGame();
+            this.endStage1();
         }
     }
 
@@ -150,6 +157,9 @@ export class GatePuzzle {
     setupNextGate() {
         this.score += 10;
         this.scoreDisplay.textContent = `Điểm: ${this.score}`;
+        this.scoreDisplay.classList.add('pop');
+        setTimeout(() => {this.scoreDisplay.classList.remove('pop');}, 300);
+
         this.checkOuputButton.disabled = false;
 
         this.currentGateIndex = this.currentGateIndex + 1;
@@ -159,11 +169,11 @@ export class GatePuzzle {
         }
 
         else {
-            this.endGame();
+            this.endStage1();
         }
     }
 
-    endGame() {
+    endStage1() {
         if (this.currentGateIndex >= 8) {
             this.gateDisplay.textContent = `Congratulation! Ban da hoan thanh phan huong dan.`;
             this.gateDisplay.style.color = 'green';
@@ -242,6 +252,9 @@ export class GatePuzzle {
     setUpNextGate2() {
         this.score += 10;
         this.scoreDisplay.textContent = `Điểm: ${this.score}`;
+        this.scoreDisplay.classList.add('pop');
+        setTimeout(() => {this.scoreDisplay.classList.remove('pop');}, 300);
+
         this.checkOuputButton.disabled = false;
 
         this.currentGateIndex = this.currentGateIndex + 1;
@@ -263,6 +276,7 @@ export class GatePuzzle {
             if (this.ledLight.parentElement) {
                 this.ledLight.parentElement.style.display = 'none';
             }
+            this.playSound(this.soundStage);
         }
     }
 
