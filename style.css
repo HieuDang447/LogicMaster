@@ -139,4 +139,18 @@
     }
 }
 
+.red-light {
+    animation: redLight 0.5s;
+}
 
+@keyframes redLight {
+    50% {
+        background: red;
+    }
+    75% {
+        background: rgb(118, 0, 0);
+    }
+    100% {
+        background: #666;
+    }
+}

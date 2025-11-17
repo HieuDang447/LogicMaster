@@ -15,7 +15,13 @@ export class LogicGates {
         'A AND (NOT B)': (a, b) => (a && !b) ? 1 : 0,
         '(NOT A) AND B': (a, b) => ((!a) && b) ? 1 : 0,
         'A OR (NOT B)': (a, b) => (a || !b) ? 1 : 0,
-        '(NOT A) OR B': (a, b) => (!a || b) ? 1 : 0
+        '(NOT A) OR B': (a, b) => (!a || b) ? 1 : 0,
+        '(A AND B) OR A': (a, b) => ((a && b) || a) ? 1 : 0,
+        '(A OR B) AND A': (a, b) => ((a || b) && a) ? 1 : 0,
+        '(A AND B) OR (A OR B)': (a, b) => ((a && b) || (a || b)) ? 1 : 0,
+        '(A AND B) AND (A OR B)': (a, b) => ((a && b) && (a || b)) ? 1 : 0,
+        '(A OR B) AND (NOT A)': (a, b) => ((a ||b) && !a) ? 1 : 0,
+        '(A NAND B) OR A': (a, b) => ((!(a && b)) || a) ? 1 : 0,
     }
 
     static GATES_NAMES_2 = Object.keys(LogicGates.GATES_STAGE2);

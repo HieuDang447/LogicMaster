@@ -107,6 +107,9 @@ export class GatePuzzle {
             this.moves -= 1;
             this.playSound(this.soundFail);
 
+            this.ledLight.classList.add('red-light');
+            setTimeout(() => { this.ledLight.classList.remove('red-light'); }, 500);
+
             this.moveRemaining.classList.add('red-moves');
             setTimeout(() => { this.moveRemaining.classList.remove('red-moves'); }, 500);
 
@@ -259,7 +262,7 @@ export class GatePuzzle {
 
         this.currentGateIndex = this.currentGateIndex + 1;
 
-        if (this.currentGateIndex < 4) {
+        if (this.currentGateIndex < 10) {
             this.setUpNewStage();
         }
         else {
