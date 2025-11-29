@@ -47,11 +47,11 @@ export class GatePuzzle {
         this.moveRemaining = document.getElementById('moves-remaining');
         this.tryAgainBtn = document.getElementById('tryagain-btn');
         this.nextStageBtn = document.getElementById('next-stage-btn');
-        this.soundClick = new Audio('audio/click.m4a');
-        this.soundSuccess = new Audio('audio/success.m4a');
-        this.soundFail = new Audio('audio/fail.m4a');
-        this.soundStage = new Audio('audio/stage.mp3');
-        this.soundNextLevel = new Audio('audio/next-level.m4a');
+        this.soundClick = new Audio('/audio/click.m4a');
+        this.soundSuccess = new Audio('/audio/success.m4a');
+        this.soundFail = new Audio('/audio/fail.m4a');
+        this.soundStage = new Audio('/audio/stage.mp3');
+        this.soundNextLevel = new Audio('/audio/next-level.m4a');
         this.resetGameBtn = document.getElementById('reset-game-btn');
 
         this.inputA.addEventListener('click', () => {
