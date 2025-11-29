@@ -30,6 +30,8 @@ export class GatePuzzle {
     soundStage;
     soundNextLevel;
 
+    resetGameBtn;
+
     constructor() {
         this.inputA = new InputButton('input-a', 'A')
         this.inputB = new InputButton('input-b', 'B')
@@ -50,6 +52,7 @@ export class GatePuzzle {
         this.soundFail = new Audio('/audio/fail.m4a');
         this.soundStage = new Audio('/audio/stage.mp3');
         this.soundNextLevel = new Audio('/audio/next-level.m4a');
+        this.resetGameBtn = document.getElementById('reset-game-btn');
 
         this.inputA.addEventListener('click', () => {
             this.inputA.toggle();
@@ -93,6 +96,12 @@ export class GatePuzzle {
             }
             else if (this.currentStage == 3) {
                 this.setUpStage3();
+            }
+        });
+
+        this.resetGameBtn.addEventListener('click', () => {
+            if(confirm("Bạn có muốn xóa toàn bộ tiến trình và chơi lại?")) {
+                this.resetGameData();
             }
         });
     }
@@ -150,7 +159,11 @@ export class GatePuzzle {
     setupNewGate() {
         this.inputA.reset();
         this.inputB.reset();
+        this.inputC.element.style.display = 'none';
         this.currentStage = 1;
+
+        this.gateSymbol2.style.display = 'none';
+        this.gateSymbol3.style.display = 'none';
 
         const currentGateName = LogicGates.GATE_NAMES[this.currentGateIndex];
         this.gateDisplay.textContent = `Cổng Logic: ${currentGateName}`;
@@ -188,6 +201,8 @@ export class GatePuzzle {
         this.checkOuputButton.disabled = false;
 
         this.currentGateIndex = this.currentGateIndex + 1;
+
+        this.saveGame();
 
         if (this.currentGateIndex < LogicGates.GATE_NAMES.length) {
             this.setupNewGate();
@@ -258,6 +273,10 @@ export class GatePuzzle {
     setUpNewGate2() {
         this.inputA.reset();
         this.inputB.reset();
+        this.inputC.element.style.display = 'none';
+
+        this.gateSymbol.style.display = 'none';
+        this.gateSymbol3.style.display = 'none';
 
         this.nextGateBtn.style.display = 'none';
 
@@ -277,6 +296,8 @@ export class GatePuzzle {
     setUpStage2() {
         this.currentStage = 2;
         this.currentGateIndex = 0;
+
+        this.saveGame();
         
         this.inputA.element.style.display = 'inline-block';
         this.inputB.element.style.display = 'inline-block';
@@ -300,6 +321,8 @@ export class GatePuzzle {
         this.checkOuputButton.disabled = false;
 
         this.currentGateIndex = this.currentGateIndex + 1;
+
+        this.saveGame();
 
         if (this.currentGateIndex < LogicGates.GATES_NAMES_2.length) {
             this.setUpNewGate2();
@@ -326,6 +349,9 @@ export class GatePuzzle {
     setUpStage3() {
         this.currentStage = 3;
         this.currentGateIndex = 0;
+
+        this.saveGame();
+
         this.inputA.element.style.display = 'inline-block';
         this.inputB.element.style.display = 'inline-block';
         this.inputC.element.style.display = 'inline-block';
@@ -376,6 +402,8 @@ export class GatePuzzle {
 
         this.currentGateIndex = this.currentGateIndex + 1;
 
+        this.saveGame();
+
         if (this.currentGateIndex < LogicGates.GATES_NAMES_3.length) {
             this.setUpNewGate3();
         }
@@ -403,8 +431,62 @@ export class GatePuzzle {
         soundObject.play();
     }
 
+    //Luu du lieu vao trinh duyet
+    saveGame() {
+        const gameData = {
+            stage: this.currentStage,
+            gateIndex: this.currentGateIndex,
+            score: this.score
+        };
+
+        localStorage.setItem('LogicGateSaveData', JSON.stringify(gameData));
+        console.log("Game saved:", gameData);
+    }
+
+    //Tai du lieu tu trinh duyet
+    loadGame() {
+        const savedData = localStorage.getItem('LogicGateSaveData');
+
+        if (savedData) {
+            const gameData = JSON.parse(savedData);
+
+            this.currentStage = gameData.stage;
+            this.currentGateIndex = gameData.gateIndex;
+            this.score = gameData.score;
+
+            console.log("Game Loaded:", gameData);
+            return true;
+        }
+        return false;
+    }
+
+    resetGameData() {
+        localStorage.removeItem('LogicGateSaveData');
+        location.reload();
+    }
+
     // 10. Phương thức Khởi chạy Simulator
     init() {
-        this.setUpStage3();
+        const hasSaveFile = this.loadGame();
+
+        if (hasSaveFile) {
+            this.scoreDisplay.textContent = `Điểm: ${this.score}`;
+
+            if (this.currentStage === 1) {
+                this.setupNewGate();
+            } else if (this.currentStage === 2) {
+                this.setUpNewGate2();
+                this.gateSymbol.style.display = 'none';
+                this.gateSymbol2.style.display = 'block';
+            } else if (this.currentStage === 3) {
+                this.setUpNewGate3();
+                this.gateSymbol.style.display = 'none';
+                this.gateSymbol2.style.display = 'none';
+                this.gateSymbol3.style.display = 'block';
+                this.inputC.element.style.display = 'inline-block'; 
+            }
+        } else {
+            this.setupNewGate();
+        }
     }
 }
