@@ -1,6 +1,7 @@
 import { LogicGates } from "./logicGates.js"; 
 import { InputButton } from "./inputButton.js";
 export class GatePuzzle {
+//Khai báo thành phần
     inputA;
     inputB;
     inputC;
@@ -155,7 +156,7 @@ export class GatePuzzle {
         }
     }
 
-    // 8. Phương thức Thiết lập Cổng Mới (Khởi tạo ban đầu)
+    // Phương thức Thiết lập Cổng Mới (Khởi tạo ban đầu)
     setupNewGate() {
         this.inputA.reset();
         this.inputB.reset();
@@ -191,7 +192,7 @@ export class GatePuzzle {
         this.moveRemaining.textContent = `Số lượt thử: ${this.moves}`;
     }
 
-    // 9. Phương thức Chuyển sang Cổng Kế tiếp
+    // Phương thức Chuyển sang Cổng Kế tiếp
     setupNextGate() {
         this.score += 10;
         this.scoreDisplay.textContent = `Điểm: ${this.score}`;
@@ -465,7 +466,7 @@ export class GatePuzzle {
         location.reload();
     }
 
-    // 10. Phương thức Khởi chạy Simulator
+    // Phương thức Khởi chạy 
     init() {
         const hasSaveFile = this.loadGame();
 
